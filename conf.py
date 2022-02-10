@@ -1,10 +1,12 @@
 import re
 import os
+import shutil
 import sys
 from pathlib import Path
 
 import docutils
 from pygments.lexers import JsonLexer, XmlLexer
+from sphinx.ext import graphviz
 from sphinx.util import logging
 import sphinx
 
@@ -106,6 +108,16 @@ else:
             {'directory': odoo_dir, 'version': release},
         )
         odoo_dir_in_path = True
+
+
+# Fail silently if `dot` is not installed and
+original_render_dot = graphviz.render_dot
+def patched_render_dot(*args, **kwargs):
+    if shutil.which('dot'):
+        return original_render_dot(*args, **kwargs)
+    return (None, None)
+graphviz.render_dot = patched_render_dot
+
 
 # Mapping between odoo models related to master data and the declaration of the
 # data. This is used to point users to available xml_ids when giving values for
