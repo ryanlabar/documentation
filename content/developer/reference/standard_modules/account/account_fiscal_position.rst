@@ -5,6 +5,7 @@ Fiscal Position
 ===============
 
 .. automodel:: odoo.addons.account.models.chart_template.AccountFiscalPositionTemplate
+    :main:
 
     .. autofield:: sequence
     .. autofield:: name

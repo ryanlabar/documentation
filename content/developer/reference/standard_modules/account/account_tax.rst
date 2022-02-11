@@ -5,6 +5,7 @@ Taxes
 =====
 
 .. automodel:: odoo.addons.account.models.chart_template.AccountTaxTemplate
+    :main:
 
     .. autofield:: chart_template_id
     .. autofield:: name

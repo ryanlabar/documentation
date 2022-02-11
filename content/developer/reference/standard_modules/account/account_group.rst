@@ -5,6 +5,7 @@ Account Group
 =============
 
 .. automodel:: odoo.addons.account.models.chart_template.AccountGroupTemplate
+    :main:
 
     .. autofield:: parent_id
     .. autofield:: name

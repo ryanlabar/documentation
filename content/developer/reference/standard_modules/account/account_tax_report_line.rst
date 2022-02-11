@@ -5,6 +5,7 @@ Tax Report line
 ===============
 
 .. automodel:: odoo.addons.account.models.account_tax_report.AccountTaxReportLine
+    :main:
 
     .. autofield:: name
     .. autofield:: tag_ids

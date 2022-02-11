@@ -2,15 +2,25 @@ import datetime
 from typing import Sequence
 
 from docutils.parsers.rst import directives
+from docutils.parsers.rst.states import RSTState
 from sphinx.domains.python import PyClasslike, PyAttribute
 from sphinx.ext.autodoc import AttributeDocumenter, ClassDocumenter
 
 import odoo
 
 
+nested_parse = RSTState.nested_parse
+def patched_nested_parse(self, block, input_offset, node, match_titles=False,
+    state_machine_class=None, state_machine_kwargs=None):
+    match_titles = True
+    return nested_parse(self, block, input_offset, node, match_titles, state_machine_class, state_machine_kwargs)
+RSTState.nested_parse = patched_nested_parse
+
+
 class OdooClassDocumenter(ClassDocumenter):
     objtype = 'model'
     priority = 10 + ClassDocumenter.priority
+    option_spec = {**ClassDocumenter.option_spec, 'main': directives.flag}
 
     @classmethod
     def can_document_member(cls, member, membername, isattr, parent):
@@ -19,11 +29,26 @@ class OdooClassDocumenter(ClassDocumenter):
     def add_content(self, more_content):
         sourcename = self.get_sourcename()
         cls = self.object
-        self.add_line(f".. _model-{cls._name.replace('.', '-')}:", sourcename)
-        self.add_line('.. py:attribute:: _name' , sourcename)
-        self.add_line(f'  :value: {cls._name}', sourcename)
-        self.add_line('' , sourcename)
+        if 'main' in self.options:
+            self.add_line(f".. _model-{cls._name.replace('.', '-')}:", sourcename)
+            self.add_line('.. py:attribute:: _name', sourcename)
+            self.add_line(f'  :value: {cls._name}', sourcename)
+            self.add_line('' , sourcename)
         super().add_content(more_content)
+
+    def add_directive_header(self, sig: str) -> None:
+        """Add the directive header and options to the generated content."""
+        sourcename = self.get_sourcename()
+        module = self.modname.split('addons.')[1].split('.')[0]
+        if 'main' in self.options:
+            title = f"Original definition from `{module}`"
+        else:
+            title = f"Additional fields with `{module}`"
+        
+        self.add_line(title, sourcename)
+        self.add_line('=' * len(title), sourcename)
+        self.add_line('', sourcename)
+        return super().add_directive_header(sig)
 
 
 class FieldDocumenter(AttributeDocumenter):
@@ -78,7 +103,7 @@ class FieldDocumenter(AttributeDocumenter):
             self.add_line(string, source_name)
             reference = self.config.model_references.get(comodel_name)
             if reference:
-                self.add_line(f":possible_values: `{reference} <{self.config.source_read_replace['GITHUB_PATH']}/{reference}>`__", source_name)
+                self.add_line(f":possible values: `{reference} <{self.config.source_read_replace['GITHUB_PATH']}/{reference}>`__", source_name)
         if field.default:
             self.add_line(f":default: {field.default(odoo.models.Model)}", source_name)
 
@@ -95,6 +120,7 @@ class FieldDocumenter(AttributeDocumenter):
         field.__doc__ = field.__dict__.get('__doc__', "")
         res = super().get_doc(encoding, ignore)
         return res
+
 
 def disable_warn_missing_reference(app, domain, node):
     if not ((domain and domain.name != 'std') or node['reftype'] != 'ref'):

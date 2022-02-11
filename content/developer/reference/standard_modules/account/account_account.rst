@@ -5,6 +5,7 @@ Account
 =======
 
 .. automodel:: odoo.addons.account.models.chart_template.AccountAccountTemplate
+    :main:
 
     .. autofield:: name
     .. autofield:: currency_id

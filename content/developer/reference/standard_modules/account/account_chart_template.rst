@@ -4,13 +4,8 @@
 Chart Template
 ==============
 
----------------------
-Invoicing (`account`)
----------------------
-
-This is the main module for Invoicing.
-
 .. automodel:: odoo.addons.account.models.chart_template.AccountChartTemplate
+    :main:
 
     .. autofield:: name
     .. autofield:: parent_id
@@ -46,14 +41,10 @@ This is the main module for Invoicing.
     .. autofield:: property_cash_basis_base_account_id
 
 
----------------------------------
-Multi Language (`l10n_multilang`)
----------------------------------
 
-Multi language support for Chart of Accounts, Taxes, Tax Codes, Journals,
-Accounting Templates, Analytic Chart of Accounts and Analytic Journals.
-
-
-.. autoclass:: odoo.addons.l10n_multilang.models.account.AccountChartTemplate
+.. automodel:: odoo.addons.l10n_multilang.models.account.AccountChartTemplate
+    
+    Multi language support for Chart of Accounts, Taxes, Tax Codes, Journals,
+    Accounting Templates, Analytic Chart of Accounts and Analytic Journals.
 
     .. autofield:: spoken_languages
