@@ -496,6 +496,14 @@ payment, 15 days, 21 days, all falling within the current month).
 Payments
 --------
 
+.. warning::
+   - When creating a payment in MXN for an invoice in USD, the payment **must** be created using the
+     'Register Payment' button on the invoice view and not separately as a payment. Otherwise, the
+     payment CFDI will not be correctly generated.
+   - As such, a payment in MXN cannot be used to pay multiple invoices in USD. Rather, the payment
+     should be separated into multiple payments, and each payment created using the 'Register Payment'
+     button on its corresponding invoice.
+
 `According to the SAT documentation
 <https://www.sat.gob.mx/consultas/92764/comprobante-de-recepcion-de-pagos>`_, there may be 2 types
 of payments: **PUE** or **PPD**. In both cases the payment process in Odoo is the same, the
