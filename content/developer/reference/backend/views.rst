@@ -297,16 +297,19 @@ how the matched node should be altered:
     * if the ``attribute`` element has no body, the attribute named after
       its ``name`` is removed from the matched node. If no such attribute
       exists, an error is raised
-
+    * it is also possible to edit attribute values by using ``add`` and ``remove`` tags.
+      the values given by ``add`` is added to the values separated by ``separator`` 
+      (default: ``,``) and the value given by remove is earased from attribute values
+    
     .. code-block:: xml
 
       <field name="sale_information" position="attributes">
         <attribute name="invisible">0</attribute>
         <attribute name="attrs">
           {'invisible': [('sale_ok', '=', False)], 'readonly': [('editable', '=', False)]}
+        <attribute name="class" add="mt-1" separator=" "/>
         </attribute>
       </field>
-
 ``move``
   can be used as a direct child of a inheritance spec
   with a ``inside``, ``replace``, ``after`` or ``before`` ``position`` attribute
