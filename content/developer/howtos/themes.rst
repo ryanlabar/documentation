@@ -464,7 +464,7 @@ in another dedicated file, extending the ``_assets_frontend_helpers`` template.
         </xpath>
     </template>
 
-With for example:
+Width, for example:
 
 .. code-block:: scss
 
